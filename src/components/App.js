@@ -1,45 +1,81 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
+import RecipeEdit from "./RecipeEdit";
 
 const { v4: uuidv4 } = require("uuid");
 
 export const RecipeContext = React.createContext();
 
+const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
+
 function App() {
+  const [selectedRecipeId, setSelectedRecipeId] = useState();
   const [recipes, setRecipes] = useState(sampleRecipes);
+
+  const selectedRecipe = recipes.find(
+    (recipe) => recipe.id === selectedRecipeId
+  );
+
+  function handleRecipeSelect(id) {
+    setSelectedRecipeId(id);
+  }
+
+  useEffect(() => {
+    const recipesJSON = localStorage.getItem(LOCAL_STORAGE_KEY);
+
+    if (recipesJSON != null) setRecipes(JSON.parse(recipesJSON));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(recipes));
+  }, [recipes]);
 
   const recipeContextValue = {
     handleRecipeAdd,
     handleRecipeDelete,
+    handleRecipeSelect,
+    handleRecipeChange,
   };
 
   function handleRecipeAdd() {
     const newRecipe = {
       id: uuidv4(),
-      name: "new",
+      name: "",
       servings: 1,
-      cookTime: "1:00",
-      instructions: "Instr.",
+      cookTime: "",
+      instructions: "",
       ingredients: [
         {
           id: uuidv4(),
-          name: "Name",
-          amount: "1 Tbs",
+          name: "",
+          amount: "",
         },
       ],
     };
 
+    setSelectedRecipeId(newRecipe.id);
     setRecipes([...recipes, newRecipe]);
   }
 
   function handleRecipeDelete(id) {
+    if (selectedRecipeId != null && selectedRecipeId === id) {
+      setSelectedRecipeId(undefined);
+    }
     setRecipes(recipes.filter((recipe) => recipe.id !== id));
+  }
+
+  function handleRecipeChange(id, recipe) {
+    const newRecipes = [...recipes];
+    const index = newRecipes.findIndex((r) => r.id === id);
+    newRecipes[index] = recipe;
+    setRecipes(newRecipes);
   }
 
   return (
     <RecipeContext.Provider value={recipeContextValue}>
       <RecipeList recipes={recipes} />
+      {selectedRecipe && <RecipeEdit recipe={selectedRecipe} />}
     </RecipeContext.Provider>
   );
 }
