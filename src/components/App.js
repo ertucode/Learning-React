@@ -54,6 +54,12 @@ function App() {
           amount: "",
         },
       ],
+      authors: [
+        {
+          id: uuidv4(),
+          name: "",
+        },
+      ],
     };
 
     setSelectedRecipeId(newRecipe.id);
@@ -95,6 +101,16 @@ const sampleRecipes = [
       { id: "1", name: "Salt", amount: "1 Tbs" },
       { id: "2", name: "Chicken", amount: "2 pounds" },
     ],
+    authors: [
+      {
+        id: "1",
+        name: "Stephen Curry",
+      },
+      {
+        id: "2",
+        name: "Ayesha Curry",
+      },
+    ],
   },
   {
     id: 2,
@@ -105,6 +121,16 @@ const sampleRecipes = [
     ingredients: [
       { id: "1", name: "Pepperica", amount: "2 Tbs" },
       { id: "2", name: "Pork", amount: "2 pounds" },
+    ],
+    authors: [
+      {
+        id: "1",
+        name: "Stephen Curry",
+      },
+      {
+        id: "2",
+        name: "Ayesha Curry",
+      },
     ],
   },
 ];

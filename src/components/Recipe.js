@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import IngredientList from "./IngredientList";
+import AuthorList from "./AuthorList";
 
 import { RecipeContext } from "./App";
 
@@ -10,6 +11,7 @@ export default function Recipe({
   cookTime,
   instructions,
   ingredients,
+  authors,
 }) {
   const { handleRecipeDelete, handleRecipeSelect } = useContext(RecipeContext);
 
@@ -52,6 +54,14 @@ export default function Recipe({
           <IngredientList ingredients={ingredients} />
         </div>
       </div>
+      {authors?.length && (
+        <div>
+          <span className="recipe__label">Authors:</span>
+          <div className="recipe__value recipe__value--indented">
+            <AuthorList authors={authors} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
