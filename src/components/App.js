@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import RecipeList from "./RecipeList";
 import "../css/app.css";
 import RecipeEdit from "./RecipeEdit";
+import SearchBox from "./SearchBox";
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -12,6 +13,7 @@ const LOCAL_STORAGE_KEY = "cookingWithReact.recipes";
 function App() {
   const [selectedRecipeId, setSelectedRecipeId] = useState();
   const [recipes, setRecipes] = useState(sampleRecipes);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const selectedRecipe = recipes.find(
     (recipe) => recipe.id === selectedRecipeId
@@ -74,7 +76,8 @@ function App() {
 
   return (
     <RecipeContext.Provider value={recipeContextValue}>
-      <RecipeList recipes={recipes} />
+      <SearchBox searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <RecipeList recipes={recipes} searchQuery={searchQuery} />
       {selectedRecipe && <RecipeEdit recipe={selectedRecipe} />}
     </RecipeContext.Provider>
   );
